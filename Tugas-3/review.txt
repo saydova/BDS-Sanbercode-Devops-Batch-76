@@ -1,0 +1,30 @@
+Saran dari AI:
+
+1. Script belum memiliki error handling (misalnya jika file syslog.txt tidak ada).
+2. Tidak ada pengecekan apakah folder backup-log sudah ada atau tidak.
+3. Tidak menggunakan absolute path, sehingga bisa error jika dijalankan dari direktori lain.
+4. Tidak ada logging tambahan untuk memastikan proses berhasil.
+
+Pendapat saya:
+saya setuju review dari AI, namun menurut saya untuk development lebih lanjut kita tetap turut memberikan ide,
+agar lebih fleksibel ketika bekerja dengan tim, karena yang tahu kebutuhan antar tim dan yang harus melakukan analisis adalah kita sendiri dan anggota tim yang lain,
+sehingga tidak ada improvement berlebih (tetap efisien dan efektif), dan kita gunakan ai sebagai tools dan eksekutor untuk mempercepat pekerjaan kita
+
+berikut adalah contoh improvement secara script dari ai yang lebih absolut
+#!/bin/bash
+
+echo "Memulai backup log..."
+
+if [ ! -f syslog.txt ]; then
+  echo "Error: file syslog.txt tidak ditemukan!"
+  exit 1
+fi
+
+mkdir -p backup-log
+
+cp syslog.txt backup-log/
+
+echo "Backup selesai!"
+
+
+di situ ada improvement terkait error handling, dan jika scriptnya kompleks nantinya saat development kita tetap harus memikirkan error handling yang lebih efektif secara teamwork, agar ci/cd dan proses development bisa berjalan sesuai dengan mapping yang sudah di arahkan ketika masa preparation dan analisis teamwork
