@@ -13,10 +13,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Run Test Script
+      - name: Show Pipeline Start
+        run: echo "Pipeline Berjalan Sukses!"
+
+      - name: Load Secret and Debug
         env:
           MY_SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
         run: |
-          echo "Pipeline Berjalan Sukses!"
           echo "Memeriksa secret key..."
+
+          echo "RAW SECRET OUTPUT:"
+          echo "$MY_SECRET_KEY"
+
+          echo "LENGTH SECRET:"
+          echo "${#MY_SECRET_KEY}"
+
+      - name: Mask Test (Safe Output)
+        env:
+          MY_SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
+        run: |
           echo "Secret Key: $MY_SECRET_KEY"
