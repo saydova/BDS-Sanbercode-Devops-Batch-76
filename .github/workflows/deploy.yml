@@ -1,0 +1,55 @@
+name: CI/CD Pipeline Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build App
+        run: |
+          mkdir dist
+          echo "Deploy sukses dari CI/CD" > dist/index.html
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hasil-build-web
+          path: dist/
+
+  deploy-to-vps:
+    runs-on: ubuntu-latest
+    needs: build-app
+
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: hasil-build-web
+          path: dist/
+
+      - name: Copy ke VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "dist/*"
+          target: "/var/www/aplikasi-saya"
+
+      - name: SSH Command
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            echo "Deploy Berhasil"
+            ls /var/www/aplikasi-saya
